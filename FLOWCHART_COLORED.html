@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QasimaRide USSD - Colorful Flowcharts</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .flowchart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(900px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .flowchart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .flowchart-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 1.8em;
+        }
+
+        .box {
+            display: inline-block;
+            padding: 12px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        .primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .success {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: #333;
+        }
+
+        .danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+        }
+
+        .info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: #333;
+        }
+
+        .dark {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+        }
+
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .flow-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .decision-box {
+            display: inline-block;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            transform: rotate(45deg);
+            margin: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .decision-content {
+            transform: rotate(-45deg);
+            text-align: center;
+        }
+
+        .queue-item {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            text-align: center;
+            line-height: 60px;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .queue-item.active {
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            color: #333;
+            transform: scale(1.1);
+        }
+
+        .flow-line {
+            text-align: center;
+            font-size: 1.5em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .legend h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .legend-item {
+            display: inline-block;
+            margin: 10px 20px;
+        }
+
+        .legend-color {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .menu-item {
+            padding: 15px;
+            border-radius: 8px;
+            background: #f0f0f0;
+            border-left: 4px solid #667eea;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: #e0e0e0;
+            transform: translateX(10px);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .status-available {
+            background: #84fab0;
+            color: #333;
+        }
+
+        .status-busy {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .stats-box h4 {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .step-counter {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            font-weight: bold;
+            margin: 10px;
+        }
+
+        footer {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .flowchart-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🚕 QasimaRide USSD System</h1>
+            <p>Rickshaw Management - Complete System Flowcharts</p>
+        </header>
+
+        <!-- Main System Architecture -->
+        <div class="flowchart-card">
+            <h2>🏗️ System Architecture Overview</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <div class="box primary" style="display: block; width: 90%; margin: 10px auto;">
+                        📱 QasimaRide USSD System
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div style="display: inline-block;">
+                        <div class="box success" style="margin: 10px;">🚗 Driver</div>
+                        <div class="box info" style="margin: 10px;">👤 Passenger</div>
+                        <div class="box warning" style="margin: 10px;">🔑 Admin</div>
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div class="box dark" style="display: block; width: 90%; margin: 10px auto;">
+                        ⚙️ StandManager (Core Controller)
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div style="display: inline-block;">
+                        <div class="box primary" style="margin: 10px;">🏛️ CHARMINAR</div>
+                        <div class="box primary" style="margin: 10px;">🚂 SECUNDERABAD</div>
+                        <div class="box primary" style="margin: 10px;">🏢 GACHIBOWLI</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Menu Flow -->
+        <div class="flowchart-card">
+            <h2>🎮 Main Menu Flow</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <div class="box primary" style="display: block; width: 90%; margin: 10px auto;">
+                        🌟 Welcome to QasimaRide USSD (*789#)
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div style="background: #f0f0f0; padding: 20px; border-radius: 10px; display: inline-block;">
+                        <div class="menu-grid">
+                            <div class="box success">1️⃣ Driver Menu</div>
+                            <div class="box info">2️⃣ Passenger Menu</div>
+                            <div class="box warning">3️⃣ Admin Status</div>
+                            <div class="box danger">4️⃣ Exit</div>
+                        </div>
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div class="box dark" style="display: block; width: 90%; margin: 10px auto;">
+                        Execute Selected Option
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Module -->
+        <div class="flowchart-card">
+            <h2>🚗 Driver Module Flow</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <div class="box success">Enter Driver ID</div>
+                    <div class="flow-line">⬇️</div>
+                    <div class="box warning" style="display: inline-block;">Driver Found?</div>
+                    <div style="margin: 20px;">
+                        <div style="display: inline-block; margin: 10px;">
+                            <div class="box primary">✓ Existing</div>
+                        </div>
+                        <div style="display: inline-block; margin: 10px;">
+                            <div class="box danger">✗ New Driver</div>
+                        </div>
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div style="background: #f0f0f0; padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Driver Options:</h4>
+                        <div class="menu-item">1️⃣ View Profile</div>
+                        <div class="menu-item">2️⃣ Toggle Availability</div>
+                        <div class="menu-item">3️⃣ View Stand Status</div>
+                        <div class="menu-item">4️⃣ Complete a Ride</div>
+                        <div class="menu-item">5️⃣ Back to Main Menu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Passenger Module -->
+        <div class="flowchart-card">
+            <h2>👤 Passenger Module Flow</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <div class="box info">Enter Passenger ID</div>
+                    <div class="flow-line">⬇️</div>
+                    <div class="box warning" style="display: inline-block;">Passenger Found?</div>
+                    <div style="margin: 20px;">
+                        <div style="display: inline-block; margin: 10px;">
+                            <div class="box primary">✓ Existing</div>
+                        </div>
+                        <div style="display: inline-block; margin: 10px;">
+                            <div class="box danger">✗ New Passenger</div>
+                        </div>
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div style="background: #f0f0f0; padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Passenger Options:</h4>
+                        <div class="menu-item">1️⃣ View Profile</div>
+                        <div class="menu-item">2️⃣ Request a Ride</div>
+                        <div class="menu-item">3️⃣ Check Queue Status</div>
+                        <div class="menu-item">4️⃣ Back to Main Menu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ride Allocation -->
+        <div class="flowchart-card">
+            <h2>🚕 Ride Request & Allocation</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <span class="step-counter">1</span>
+                    <div class="box success" style="display: block; margin: 10px;">Passenger Requests Ride</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    <span class="step-counter">2</span>
+                    <div class="box info" style="display: block; margin: 10px;">Select Stand & Enter Location</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    <span class="step-counter">3</span>
+                    <div class="box primary" style="display: block; margin: 10px;">Add to Queue (FIFO)</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    <span class="step-counter">4</span>
+                    <div class="box warning" style="display: block; margin: 10px;">Admin Allocates Ride</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    <span class="step-counter">5</span>
+                    <div class="box success" style="display: block; margin: 10px;">✓ Ride Allocated Successfully!</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    <span class="step-counter">6</span>
+                    <div class="box dark" style="display: block; margin: 10px;">Driver Completes Ride</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div class="flowchart-card">
+            <h2>🔑 Admin Panel Flow</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <div class="box warning" style="display: block; width: 90%; margin: 10px auto;">
+                        🔐 Enter Admin Password
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div class="box warning" style="display: inline-block;">Password Correct?</div>
+                    <div style="margin: 20px;">
+                        <div style="display: inline-block; margin: 10px;">
+                            <div class="box success">✓ YES</div>
+                        </div>
+                        <div style="display: inline-block; margin: 10px;">
+                            <div class="box danger">✗ NO</div>
+                        </div>
+                    </div>
+                    <div class="flow-line">⬇️</div>
+                    <div style="background: #f0f0f0; padding: 20px; border-radius: 10px;">
+                        <h4 style="color: #667eea; margin-bottom: 15px;">Admin Options:</h4>
+                        <div class="menu-item">1️⃣ View System Status</div>
+                        <div class="menu-item">2️⃣ Allocate Next Ride</div>
+                        <div class="menu-item">3️⃣ View All Drivers</div>
+                        <div class="menu-item">4️⃣ View All Passengers</div>
+                        <div class="menu-item">5️⃣ Back to Main Menu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Queue Management -->
+        <div class="section-title">📊 FIFO Queue Management</div>
+        <div class="flowchart-card">
+            <h2>Queue Progression (First In, First Out)</h2>
+            <div class="flow-container">
+                <div style="text-align: center; overflow-x: auto;">
+                    <h4 style="color: #667eea; margin: 20px 0;">Initial State - Empty</h4>
+                    <div>[ Empty ]</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0;">Step 1 - First Passenger</h4>
+                    <div class="queue-item active">P1</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0;">Step 2 - Second Passenger</h4>
+                    <div class="queue-item active">P1</div>
+                    <div class="queue-item">P2</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0;">Step 3 - Third Passenger</h4>
+                    <div class="queue-item active">P1</div>
+                    <div class="queue-item">P2</div>
+                    <div class="queue-item">P3</div>
+                    
+                    <div class="flow-line">⬇️</div>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0;">Step 4 - Allocate P1 (First Out)</h4>
+                    <div class="box success">P1 → Allocated to Driver D001</div>
+                    <div class="queue-item active">P2</div>
+                    <div class="queue-item">P3</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="section-title">📈 System Statistics</div>
+        <div class="flowchart-card">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                <div class="stats-box">
+                    <div>🚗 Total Drivers</div>
+                    <h4>3</h4>
+                    <small>Ahmed Khan, Rahul Sharma, Farah Ali</small>
+                </div>
+                <div class="stats-box">
+                    <div>👤 Total Passengers</div>
+                    <h4>2</h4>
+                    <small>Zainul Abdin, Priya Patel</small>
+                </div>
+                <div class="stats-box">
+                    <div>🏛️ Total Stands</div>
+                    <h4>3</h4>
+                    <small>Charminar, Secunderabad, Gachibowli</small>
+                </div>
+                <div class="stats-box">
+                    <div>💻 Technology</div>
+                    <h4>Java 17</h4>
+                    <small>Maven Build System</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Structure -->
+        <div class="section-title">🗂️ Data Structure Architecture</div>
+        <div class="flowchart-card">
+            <h2>Collections & Object Relationships</h2>
+            <div class="flow-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Type</th>
+                            <th>Purpose</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>StandManager</strong></td>
+                            <td>Core Controller</td>
+                            <td>Manages all stands & users</td>
+                            <td>coordinateRides()</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HashMap&lt;String, RickshawStand&gt;</strong></td>
+                            <td>Collection</td>
+                            <td>Store multiple stands</td>
+                            <td>stands.get("CHARMINAR")</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ArrayList&lt;Driver&gt;</strong></td>
+                            <td>Collection</td>
+                            <td>Store drivers at each stand</td>
+                            <td>driversAtStand.add(driver)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Queue&lt;Passenger&gt;</strong></td>
+                            <td>FIFO Collection</td>
+                            <td>Manage waiting passengers</td>
+                            <td>passengerQueue.poll()</td>
+                        </tr>
+                        <tr>
+                            <td><strong>User (Abstract)</strong></td>
+                            <td>Base Class</td>
+                            <td>Common attributes for all users</td>
+                            <td>userId, name, phone</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Driver</strong></td>
+                            <td>Extends User</td>
+                            <td>Driver-specific properties</td>
+                            <td>vehicle, license, available</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Passenger</strong></td>
+                            <td>Extends User</td>
+                            <td>Passenger-specific properties</td>
+                            <td>source, destination, activeRide</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Driver Status Flow -->
+        <div class="section-title">🚗 Driver Status Management</div>
+        <div class="flowchart-card">
+            <h2>Driver Availability Workflow</h2>
+            <div class="flow-container" style="text-align: center;">
+                <div class="box success">🟢 AVAILABLE</div>
+                <div class="flow-line">⬇️ (Ride Request)</div>
+                <div class="box danger">🔴 BUSY</div>
+                <div class="flow-line">⬇️ (Complete Ride)</div>
+                <div class="box success">🟢 AVAILABLE</div>
+                
+                <div style="margin-top: 30px; background: #f0f0f0; padding: 20px; border-radius: 10px;">
+                    <h4 style="color: #667eea; margin-bottom: 15px;">Driver Properties:</h4>
+                    <table style="margin-top: 10px;">
+                        <tr>
+                            <td style="padding: 8px; border: none;"><span class="status-badge status-available">✓ Available</span></td>
+                            <td style="padding: 8px; border: none;">Ready for new ride</td>
+                        </tr>
+                        <tr style="background: #eee;">
+                            <td style="padding: 8px; border: none;"><span class="status-badge status-busy">✗ Busy</span></td>
+                            <td style="padding: 8px; border: none;">Currently on a ride</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="section-title">💻 Technology Stack & Build Flow</div>
+        <div class="flowchart-card">
+            <h2>Development to Deployment</h2>
+            <div class="flow-container">
+                <div style="text-align: center;">
+                    <div class="box primary" style="display: block; margin: 10px;">
+                        📝 Java Source Code (.java files)
+                    </div>
+                    <div class="flow-line">⬇️ Compile</div>
+                    <div class="box success" style="display: block; margin: 10px;">
+                        ⚙️ Bytecode (.class files)
+                    </div>
+                    <div class="flow-line">⬇️ Maven Build</div>
+                    <div class="box info" style="display: block; margin: 10px;">
+                        📦 JAR Package (QasimaRide_USSD-1.0.0.jar)
+                    </div>
+                    <div class="flow-line">⬇️ Runtime</div>
+                    <div class="box warning" style="display: block; margin: 10px;">
+                        ☕ Java 17 Runtime Environment
+                    </div>
+                    <div class="flow-line">⬇️ Execute</div>
+                    <div class="box success" style="display: block; margin: 10px;">
+                        🚀 QasimaRide USSD Running!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <h3>📋 Legend & Color Meanings</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                    <span><strong>Primary</strong> - Main processes & actions</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);"></div>
+                    <span><strong>Success</strong> - Successful operations & confirmations</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                    <span><strong>Warning</strong> - Decision points & caution states</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);"></div>
+                    <span><strong>Danger</strong> - Errors & negative states</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                    <span><strong>Info</strong> - Information & input states</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);"></div>
+                    <span><strong>Dark</strong> - System level processes</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <h3>🎉 QasimaRide USSD - Complete System Flowcharts</h3>
+            <p>Rickshaw Management System for Hyderabad | Java 17 | Maven Build</p>
+            <p style="font-size: 0.9em; margin-top: 15px;">Repository: github.com/ZainulAbdin-67/QasimaRide_USSD</p>
+        </footer>
+    </div>
+</body>
+</html>
